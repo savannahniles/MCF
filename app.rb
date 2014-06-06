@@ -144,6 +144,13 @@ post '/Renderobjects/new/?' do
   document_by_id('Renderobjects', new_id)
 end
 
+#temp
+get '/Renderobjects/new/?' do
+  content_type :json
+  new_id = settings.mongo_db['Renderobjects'].insert params #if params
+  document_by_id('Renderobjects', new_id)
+end
+
 #example: http://localhost:9393/Tracks/new/?name=testTrack&renderobjects=['5391fb813eb9db7dc1000001', '5391fbb73eb9db7dcf000001']
 post '/Tracks/new/?' do
   content_type :json
@@ -151,8 +158,16 @@ post '/Tracks/new/?' do
   document_by_id('Tracks', new_id)
 end
 
+#temp: 
+get '/Tracks/new/?' do
+  content_type :json
+  new_id = settings.mongo_db['Tracks'].insert params #if params
+  document_by_id('Tracks', new_id)
+end
+
 #   -----------------------------------------------------------------------------------------
 #                                        delete methods 
+# Need to be made deletes.
 #   -----------------------------------------------------------------------------------------
 
 # delete the specified document and return success
