@@ -112,6 +112,12 @@ get '/Renderobjects/?' do
   settings.mongo_db['Renderobjects'].find.to_a.to_json
 end
 
+#this lists all documents in tracks 
+get '/Tracks/?' do
+  content_type :json
+  settings.mongo_db['Tracks'].find.to_a.to_json
+end
+
 # find a document by its ID
 get '/Renderobjects/id/:id/?' do
   content_type :json
@@ -131,12 +137,48 @@ end
 #   -----------------------------------------------------------------------------------------
 
 # insert a new document from the request parameters, then return the full document
-#example: http://localhost:9393/Renderobjects/new/?title=thing&url=http://stackoverflow.com/questions/1805761/check-if-url-is-valid-ruby&render_type=test
-
+#example: http://localhost:9393/Renderobjects/new/?name=thing&url=http://www.pinterest.com/savannahniles/&render_type=test
 post '/Renderobjects/new/?' do
   content_type :json
   new_id = settings.mongo_db['Renderobjects'].insert params #if params
   document_by_id('Renderobjects', new_id)
+end
+
+#example: http://localhost:9393/Tracks/new/?name=testTrack&renderobjects=['5391fb813eb9db7dc1000001', '5391fbb73eb9db7dcf000001']
+post '/Tracks/new/?' do
+  content_type :json
+  new_id = settings.mongo_db['Tracks'].insert params #if params
+  document_by_id('Tracks', new_id)
+end
+
+#   -----------------------------------------------------------------------------------------
+#                                        delete methods 
+#   -----------------------------------------------------------------------------------------
+
+# delete the specified document and return success
+get '/Renderobjects/remove/:id/?' do
+  content_type :json
+  db = settings.mongo_db['Renderobjects']
+  id = object_id(params[:id])
+  if db.find_one(id)
+    db.remove(:_id => id)
+    {:success => true}.to_json
+  else
+    {:success => false}.to_json
+  end
+end
+
+# delete the specified document and return success
+get '/Tracks/remove/:id/?' do
+  content_type :json
+  db = settings.mongo_db['Tracks']
+  id = object_id(params[:id])
+  if db.find_one(id)
+    db.remove(:_id => id)
+    {:success => true}.to_json
+  else
+    {:success => false}.to_json
+  end
 end
 
 
